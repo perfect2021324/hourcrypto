@@ -1,0 +1,18 @@
+
+
+
+<main>
+    <ng-container *ngIf="transactions?.length; else noTransactions">
+        <section>
+            <app-transaction-item *ngFor="let tran of transactions; let ind = index;" [transaction]="tran" [ind]="ind" (lookup)="showLookup($event)"></app-transaction-item>
+        </section>
+    </ng-container>
+    <ng-template #noTransactions>
+        <h2 class="text-center" style="position: absolute; top: 50%; left: 50%;">
+            No transactions found
+        </h2>
+    </ng-template>
+    <section *ngIf="selectedTransaction" class="lookup">
+        <app-transaction-item-lookup [transaction]="selectedTransaction" (hide)="hideLookup()"></app-transaction-item-lookup>
+    </section>
+</main>

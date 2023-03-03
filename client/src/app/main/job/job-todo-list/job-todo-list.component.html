@@ -1,0 +1,9 @@
+<div class="">
+    <div *ngFor="let jobTodo of jobsTodo; let i = index;" class="d-flex mt-2 mb-2" style="justify-content: center;"> 
+        <app-job-todo-item [jobTodo]="jobTodo" [ind]="i"> </app-job-todo-item>
+    </div>
+    <button *ngIf="totalJobsTodo - jobsTodo.length > 0" type="button" class="w-100 btn btn-lg rounded-3 text-primary opacity-75" (click)="loadMoreJobs()">Load more jobs</button>
+    <h3 *ngIf="jobsTodo && jobsTodo.length ===0" class="d-flex justify-content-center" style="position: relative; top: 20vh;"> 
+        There aren't any new jobs yet
+    </h3>
+</div>

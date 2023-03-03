@@ -1,0 +1,148 @@
+<div>
+  <div class="container" style="width: 98vw">
+    <form
+      #formRef
+      [formGroup]="jobForm"
+      method="POST"
+      action=""
+      id="create-job"
+      name="create-job"
+      (ngSubmit)="submitForm()"
+    >
+      <h2 class="my-3 text-center">Job Details</h2>
+      <mat-form-field class="d-block">
+        <mat-label for="job-description">Description</mat-label>
+        <textarea
+          matInput
+          formControlName="description"
+          type="text"
+          id="job-description"
+          name="crypto-description"
+          style="height: 1rem"
+        >
+        </textarea>
+        <mat-hint> Tell us what you did!</mat-hint>
+        <mat-error *ngIf="jobForm.controls.description.errors?.required"
+          >Required</mat-error
+        >
+        <mat-error *ngIf="jobForm.controls.description.errors?.minlength"
+          >Minimum 5 letters</mat-error
+        >
+      </mat-form-field>
+      <mat-form-field class="d-block">
+        <mat-label for="hours">Hours</mat-label>
+        <input
+          matInput
+          formControlName="hours"
+          type="number"
+          id="hours"
+          name="hours"
+        />
+        <mat-hint> How many hours did you take?</mat-hint>
+        <mat-error *ngIf="jobForm.controls.hours.errors?.required"
+          >Required</mat-error
+        >
+        <mat-error *ngIf="jobForm.controls.hours.errors?.min"
+          >An hour atleast</mat-error
+        >
+      </mat-form-field>
+      <ng-container>
+        <div class="input-group mt-2">
+          <input
+            formControlName="before"
+            type="file"
+            class="form-control"
+            id="before"
+            name="before"
+            accept="image/png, image/webp, image/jpeg"
+            (change)="onBeforeFileSelected($event)"
+          />
+          <label for="before" class="input-group-text" style="min-width: 70px"
+            >Before</label
+          >
+        </div>
+        <mat-hint
+          *ngIf="
+            jobForm.controls.before.pristine || !jobForm.controls.before.errors
+          "
+          style="font-size: 0.7rem"
+        >
+          Show us how it looked before..</mat-hint
+        >
+        <mat-error
+          *ngIf="
+            jobForm.controls.before.touched &&
+            jobForm.controls.before.errors?.required
+          "
+          >Required</mat-error
+        >
+        <div class="input-group mt-2">
+          <input
+            formControlName="after"
+            type="file"
+            class="form-control"
+            id="after"
+            name="after"
+            accept="image/png, image/webp, image/jpeg"
+            (change)="onAfterFileSelected($event)"
+          />
+          <label for="after" class="input-group-text" style="min-width: 70px"
+            >After</label
+          >
+        </div>
+        <mat-hint
+          *ngIf="
+            jobForm.controls.after.pristine || !jobForm.controls.after.errors
+          "
+          class="d-block"
+          style="font-size: 0.7rem"
+          >Show us how it looks now!</mat-hint
+        >
+        <mat-error
+          *ngIf="
+            jobForm.controls.after.touched &&
+            jobForm.controls.after.errors?.required
+          "
+          >Required</mat-error
+        >
+      </ng-container>
+      <button
+        mat-raised-button
+        color="accent"
+        type="submit"
+        class="my-2"
+        id="submit"
+        name="submit"
+      >
+        Submit
+      </button>
+      <button
+        mat-stroked-button
+        type="button"
+        class="my-2 ms-1"
+        id="clear"
+        name="clear"
+      >
+        Clear
+      </button>
+      <button
+        mat-button
+        type="button"
+        color="primary"
+        class="my-2 ms-1"
+        data-bs-toggle="modal"
+        data-bs-target="#mapbox-mark-modal"
+      >
+        Share the location!
+      </button>
+      <app-map
+        modalId="mapbox-mark-modal"
+        mapId="geo-map"
+        [readOnly]="false"
+        (locationSelected)="locationSelected($event)"
+      ></app-map>
+    </form>
+  </div>
+</div>
+
+

@@ -1,0 +1,35 @@
+<div class="container" style="width: 98vw;">
+    <ng-container *ngFor="let a of alerts; let i = index">
+        <div [attr.class]="'alert alert-dismissible alert-'+ a.status" *ngIf="a.status && a.message" role="alert">
+            {{a.message}}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"
+                (click)="alerts.splice(i,1)"></button>
+        </div>
+    </ng-container>
+    <form action="" [formGroup]="jobForm" (ngSubmit)="submitForm()">
+        <h3 class="text-center">
+            Need voluteers
+        </h3>
+        <div class="form-floating">
+            <input type="text" name="description" id="description" class="form-control" placeholder="Enter description"
+                formControlName="description">
+            <label for="description">Write description</label>
+        </div>
+        <div class="form-floating">
+            <input type="number" name="no-of-volunteer" id="no-of-volunteer" class="form-control"
+                placeholder="No of voluteers" formControlName="voluteers">
+            <label for="description">No of voluteers</label>
+        </div>
+        <div class="input-group">
+            <input type="file" name="current" id="current" class="form-control" placeholder="Current" accept="image/png, image/webp, image/jpeg"
+                (change)="onCurrentFileSelected($event)">
+            <label for="description" class="input-group-text">Current</label>
+        </div>
+        <button type="submit" class="btn btn-secondary my-2 ms-1" id="submit" name="submit">Submit</button>
+        <button type="button" class="btn btn-secondary my-2 ms-1" id="clear" name="clear"
+            (click)="clearForm()">Clear</button>
+        <button type="button" class="btn btn-secondary my-2 ms-1" data-bs-toggle="modal"
+            data-bs-target="#googleMapModal">Location</button>
+        <app-map modalId="googleMapModal" mapId="geo-map" [readOnly]=false (locationSelected)="locationSelected($event)"></app-map>
+    </form>
+</div>

@@ -1,0 +1,589 @@
+<ng-container>
+  <div id="proof_work" style="max-width: 100vw; height: auto">
+    <div class="card card-header mt-2">
+      <!-- <a href="" id="email" class="d-block" title="click to view user details"
+        ><<em> Posted by </em><b>{{ job._account.cryptoAddress }}</b></a
+      >
+      <span id="createAt" style="font-size: 12px"
+        ><small>{{ job.createdAt }}</small></span
+      > -->
+      <span style="font-size: 3vh"
+        >{{ job?.hours }} <em>hour claim</em> : Earn time by Voting Below :
+        <em>Voting time </em>{{ pollEndsIn > 0 ? pollEndsIn : "--" }}
+        {{ job.status }}</span
+      >
+      <!-- <span style="position: absolute; right: 1vw; font-size: 3vh">
+        {{ pollEndsIn > 0 ? pollEndsIn : "00:00" }} <b>{{ job.status }}</b>
+      </span> -->
+    </div>
+    <div class="card card.body">
+      <div
+        id="proof_work_carousel{{ ind }}"
+        class="carousel slide"
+        data-bs-ride="carousel"
+      >
+        <div class="carousel-indicators">
+          <button
+            type="button"
+            [attr.data-bs-target]="'#proof_work_carousel' + ind"
+            data-bs-slide-to="0"
+            class="active"
+            aria-current="true"
+            aria-label="before"
+          ></button>
+          <button
+            type="button"
+            [attr.data-bs-target]="'#proof_work_carousel' + ind"
+            data-bs-slide-to="1"
+            aria-label="after"
+          ></button>
+          <button
+            type="button"
+            [attr.data-bs-target]="'#proof_work_carousel' + ind"
+            data-bs-slide-to="2"
+            aria-label="location"
+          ></button>
+          <button
+            type="button"
+            [attr.data-bs-target]="'#proof_work_carousel' + ind"
+            data-bs-slide-to="3"
+            aria-label="description"
+          ></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="1500">
+            <img
+              #bRef
+              class="d-block"
+              [src]="beforeSafeUrl"
+              alt="before.jpeg"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <h1>Before</h1>
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="1500">
+            <img #aRef class="d-block" [src]="afterSafeUrl" alt="after.jpeg" />
+            <div class="carousel-caption d-none d-md-block">
+              <h1>After</h1>
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="1500">
+            <img
+              #lRef
+              class="d-block"
+              [src]="locationUrl"
+              alt="go online to see the location"
+              role="button"
+              data-bs-toggle="modal"
+              data-bs-target="#mapbox-readonly-modal"
+            />
+            <!-- <div class="carousel-caption d-none d-md-block">
+                            <h1>{{job.address}}</h1>
+                          </div> -->
+          </div>
+          <div class="carousel-item description" data-bs-interval="1500">
+            <img
+              #bRef
+              class="d-block"
+              [src]="beforeSafeUrl"
+              alt="before.jpeg"
+            />
+            <div class="carousel-caption d-none d-md-block">
+              <h1>Description</h1>
+            </div>
+          </div>
+        </div>
+        <button
+          class="carousel-control-prev"
+          type="button"
+          [attr.data-bs-target]="'#proof_work_carousel' + ind"
+          data-bs-slide="prev"
+        >
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button
+          class="carousel-control-next"
+          type="button"
+          [attr.data-bs-target]="'#proof_work_carousel' + ind"
+          data-bs-slide="next"
+        >
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+      <!-- <div class="p-2" style="text-transform: capitalize; text-align: center"> -->
+      <!-- {{ job.description }} -->
+      <!-- </div> -->
+    </div>
+
+    <div class="card card-footer mx-0 px-0 text-center">
+      <a
+        href="#"
+        class="me-1"
+        (click)="
+          $event.preventDefault(); pollEndsIn > 0 ? upvote(job._id ?? '') : null
+        "
+      >
+        <i [class]="'bi bi-hand-thumbs-up' + (isUserVotedUp() ? '-fill' : '')">
+          <span
+            *ngIf="pollEndsIn <= 0"
+            class="badge bg-primary"
+            style="font-size: 2vh"
+            >{{ job?.votes?.up?.length ?? 0 }}</span
+          ></i
+        >
+      </a>
+
+      <a
+        href="#"
+        class="me-1"
+        (click)="
+          $event.preventDefault(); pollEndsIn > 0 ? upvote(job._id ?? '') : null
+        "
+      >
+        <i [class]="'bi bi-flag' + (isUserVotedUp() ? '-fill' : '')">
+          <span
+            *ngIf="pollEndsIn <= 0"
+            class="badge bg-primary"
+            style="font-size: 2vh"
+            >{{ job?.votes?.up?.length ?? 0 }}</span
+          ></i
+        >
+      </a>
+
+      <a
+        href="#"
+        class="me-1"
+        (click)="
+          $event.preventDefault();
+          pollEndsIn > 0 ? downvote(job._id ?? '') : null
+        "
+      >
+        <i
+          [class]="
+            'bi bi-hand-thumbs-down' + (isUserVotedDown() ? '-fill' : '')
+          "
+        >
+          <span
+            *ngIf="pollEndsIn <= 0"
+            class="badge bg-primary"
+            style="font-size: 2vh"
+            >{{ job?.votes?.down?.length ?? 0 }}</span
+          ></i
+        >
+      </a>
+    </div>
+
+    <app-map
+      *ngIf="job.coords && job.address"
+      modalId="mapbox-readonly-modal"
+      [readOnly]="false"
+      [latitude]="this.job.coords.latitude"
+      [longitude]="this.job.coords.longitude"
+      [location]="job.address.toString()"
+    ></app-map>
+  </div>
+</ng-container>
+<div class="input-group w-100">
+  <a
+    href="#"
+    class="btn btn-secondary btn-lg"
+    (click)="$event.preventDefault(); toggleComments()"
+    >View</a
+  >
+  <input
+    type="text"
+    class="input"
+    name="commentInput"
+    id="commentInput"
+    class="form-control"
+    [formControl]="comment"
+    placeholder="Comments here"
+  />
+  <a
+    href="#"
+    class="btn btn-secondary btn-lg"
+    (click)="
+      $event.preventDefault();
+      postComment({ jobId: job._id ?? '', comment: comment.value })
+    "
+    >Post</a
+  >
+</div>
+<!-- <div *ngIf="showAddress" class="p-1">{{ job.address }}</div>
+<ng-container *ngIf="showTipInput">
+  <div class="input-group">
+    <input
+      type="number"
+      name="tip"
+      id="tip"
+      class="form-control"
+      [formControl]="tip"
+      placeholder="Enter amount to be tipped"
+    />
+    <a
+      href="#"
+      class="btn btn-secondary mx-1 btn-lg"
+      (click)="$event.preventDefault(); sendTip()"
+      >Tip</a
+    >
+  </div>
+</ng-container> -->
+<ng-container *ngIf="showComments">
+  <ul
+    id="commentsShow"
+    name="commentsShow"
+    class="list-group w-100"
+    *ngFor="let cmt of job.comments; let ci = index"
+  >
+    <li class="list-group-item">
+      <span style="font-size: 12px">
+        <small>{{ cmt.createdAt }} {{ cmt.createdBy }}</small>
+        <em style="position: absolute; right: 5px">reply</em></span
+      >
+      <p>{{ cmt.comment }}</p>
+    </li>
+  </ul>
+</ng-container>
+
+<!-- <div class="d-flex justify-content-center"> -->
+<!-- <a href="#" class="animated-button1">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Try Again
+        </a> -->
+<!-- </div> -->
+
+<!-- <div class="d-flex justify-content-center"> -->
+<!-- <a href="#" class="animated-button1">
+          <span></span>
+          <span></span>
+          <span></span>
+          <span></span>
+          Try Again
+        </a> -->
+<!-- </div> -->
+<!-- <img
+          style="width: 6rem; height: 6rem"
+          src="./../../assets/images/goodhour.png"
+          alt="goodhour"
+        />
+        <div>
+          <h1>VOTE</h1>
+          <img
+            style="
+              width: 4rem;
+              height: 3rem;
+              margin-right: 1rem;
+              margin-left: 1rem;
+            "
+            src="./../../assets/images/flag.png"
+            alt="flag"
+          />
+        </div>
+        <img
+          style="width: 6rem; height: 6rem"
+          src="./../../assets/images/badhour.png"
+          alt="badhour"
+        />
+      </div> -->
+
+<!-- <svg
+        version="1.1"
+        viewBox="0.0 0.0 400.0 400.0"
+        transform
+        fill="none"
+        stroke="black"
+        stroke-linecap="square"
+        stroke-miterlimit="10"
+        xmlns:xlink="http://www.w3.org/1999/xlink"
+        xmlns="http://www.w3.org/2000/svg"
+        width="100"
+        height="100"
+      >
+        <clipPath id="p.0">
+          <path
+            d="m0 0l960.0 0l0 720.0l-960.0 0l0 -720.0z"
+            clip-rule="nonzero"
+          />
+        </clipPath>
+        <g clip-path="url(#p.0)">
+          <path
+            fill="#000000"
+            fill-opacity="0.0"
+            d="m0 0l960.0 0l0 720.0l-960.0 0z"
+            fill-rule="evenodd"
+          />
+          <path
+            fill="#ff0000"
+            d="m220.07349 91.062996c74.70474 -209.17323 366.05316 0 0 268.937c-366.05316 -268.937 -74.70473 -478.11023 0 -268.937z"
+            fill-rule="evenodd"
+          />
+          <path
+            stroke="#000000"
+            stroke-width="1.0"
+            stroke-linejoin="round"
+            stroke-linecap="butt"
+            d="m220.07349 91.062996c74.70474 -209.17323 366.05316 0 0 268.937c-366.05316 -268.937 -74.70473 -478.11023 0 -268.937z"
+            fill-rule="evenodd"
+          />
+        </g>
+      </svg> -->
+<!-- <div class="d-flex w-100 justify-content-center p-2"> -->
+<!-- <button type="button" class="btn btn-success">GOOD JOB</button> -->
+<!-- 
+        <svg version="1.1" height="315" width="342">
+          <defs xmlns="http://www.w3.org/2000/svg">
+            <g id="heart">
+              <path
+                d="M0 200 v-200 h200      a100,100 90 0,1 0,200     a100,100 90 0,1 -200,0     z"
+              />
+            </g>
+          </defs>
+          <desc>a nearly perfect heart made of two arcs and a right angle</desc>
+          <use
+            xlink:href="#heart"
+            class="outline"
+            fill="red"
+            transform="rotate(225,150,121)"
+            transform="scale(.5)"
+          />
+        </svg> -->
+
+<!-- <svg
+          id="Layer_1"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <style>
+              .cls-1 {
+                fill: #ed1b24;
+                fill-rule: evenodd;
+              }
+            </style>
+          </defs>
+          <title>red-heart</title>
+          <path
+            class="cls-1"
+            d="M60.83,17.18c8-8.35,13.62-15.57,26-17C110-2.46,131.27,21.26,119.57,44.61c-3.33,6.65-10.11,14.56-17.61,22.32-8.23,8.52-17.34,16.87-23.72,23.2l-17.4,17.26L46.46,93.55C29.16,76.89,1,55.92,0,29.94-.63,11.74,13.73.08,30.25.29c14.76.2,21,7.54,30.58,16.89Z"
+          />
+        </svg>
+
+        <svg
+        id="Layer_1"
+        data-name="Layer 1"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <style>
+            .cls-1 {
+              fill: #ed1b24;
+              fill-rule: evenodd;
+            }
+          </style>
+        </defs>
+        <title>red-heart</title>
+        <path
+          class="cls-1"
+          d="M60.83,17.18c8-8.35,13.62-15.57,26-17C110-2.46,131.27,21.26,119.57,44.61c-3.33,6.65-10.11,14.56-17.61,22.32-8.23,8.52-17.34,16.87-23.72,23.2l-17.4,17.26L46.46,93.55C29.16,76.89,1,55.92,0,29.94-.63,11.74,13.73.08,30.25.29c14.76.2,21,7.54,30.58,16.89Z"
+        />d="M537.62,276.74C524,216.28,463.48,188.1,405.39,215.88c-9.92,4.74-19.09,11-28,17.3l10.82,23.91-33.35,48.18L400.08,363l-42.94,47.68L365,466.87l-29.71-59.09,33.37-45.08-42.28-56.94,39.78-49-5.78-11.85c-17.33-10.37-34.23-23.14-53.12-31.27C246.28,187.46,181.07,230.86,180,297.27c-.51,32.25,13.12,59.75,31,85.19,38.45,54.62,94,96.47,149.67,132.36,3.34,2.16,135-95.12,160.81-154.49C536,334.33,544.39,306.73,537.62,276.74Z"
+      </svg>
+
+        <svg
+          id="Layer_1"
+          data-name="Layer 1"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M537.62,276.74C524,216.28,463.48,188.1,405.39,215.88c-9.92,4.74-19.09,11-28,17.3l10.82,23.91-33.35,48.18L400.08,363l-42.94,47.68L365,466.87l-29.71-59.09,33.37-45.08-42.28-56.94,39.78-49-5.78-11.85c-17.33-10.37-34.23-23.14-53.12-31.27C246.28,187.46,181.07,230.86,180,297.27c-.51,32.25,13.12,59.75,31,85.19,38.45,54.62,94,96.47,149.67,132.36,3.34,2.16,135-95.12,160.81-154.49C536,334.33,544.39,306.73,537.62,276.74Z"
+            fill="blue"
+            transform="scale(.5)"
+            position="0"
+          />
+        </svg> -->
+<!-- <i class="bi bi-heart=break"></i>
+        <h1><i class="bi bi-arrow-left"></i></h1>
+        <H1
+          style="
+            margin-top: 0rem;
+            margin-right: 0rem;
+            margin-left: 0rem;
+            text-align: center;
+          "
+          >VOTE
+          <i class="bi bi-arrow-right"></i>
+          <br />or<br />
+
+          <p>
+            <button
+              type="button"
+              style="margin-top: 0rem"
+              class="btn btn-outline-warning"
+              title="click to report an offensive or falsified listing"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-exclamation-triangle"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"
+                ></path>
+                <path
+                  d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"
+                ></path>
+              </svg>
+              FLAG
+            </button>
+          </p>
+        </H1> -->
+<!-- <button type="button" class="btn btn-danger">NOT GOOD</button> -->
+<!-- <a
+          href="#"
+          class="me-1"
+          (click)="
+            $event.preventDefault();
+            pollEndsIn > 0 ? upvote(job._id ?? '') : null
+          "
+        > -->
+<!-- <i [class]="'bi-hand-thumbs-up' + (isUserVotedUp() ? '-fill' : '')">
+            <span
+              *ngIf="pollEndsIn <= 0"
+              class="badge bg-primary"
+              style="font-size: 0.5rem"
+              >{{ job?.votes?.up?.length ?? 0 }}</span
+            ></i
+          > -->
+<!-- </a> -->
+<!-- <a
+          href="#"
+          class="me-1"
+          (click)="
+            $event.preventDefault();
+            pollEndsIn > 0 ? downvote(job._id ?? '') : null
+          "
+        >
+          <i
+            [class]="'bi-hand-thumbs-down' + (isUserVotedDown() ? '-fill' : '')"
+          >
+            <span
+              *ngIf="pollEndsIn <= 0"
+              class="badge bg-primary"
+              style="font-size: 0.5rem"
+              >{{ job?.votes?.down?.length ?? 0 }}</span
+            ></i
+          >
+        </a> -->
+<!-- <a
+          href="#"
+          class="me-1 ms-1"
+          (click)="$event.preventDefault(); toggleComments()"
+        >
+          <i class="bi-chat-dots-fill" style="line-height: 1.8rem"></i>
+        </a> -->
+<!-- <a
+          href="#"
+          style="position: absolute; right: 5rem"
+          (click)="$event.preventDefault(); toggleAddress()"
+          ><i class="bi-geo"></i
+        ></a> -->
+<!-- <span style="position: absolute; right: 3rem"
+          ><i class="bi-hourglass-split"></i>{{ job?.hours }}</span
+        >
+        <a
+          href="#"
+          style="position: absolute; right: 1rem"
+          (click)="$event.preventDefault(); toggleTipInput()"
+        >
+          <i class="bi-piggy-bank">
+            <span
+              *ngIf="tipItem.status"
+              class="badge bg-primary"
+              style="font-size: 0.5rem"
+              >{{ tipItem?.amount }}</span
+            ></i
+          >
+        </a> -->
+<!-- </div> -->
+
+<!-- <div class="input-group w-100">
+        <a
+          href="#"
+          class="btn btn-secondary btn-lg"
+          (click)="$event.preventDefault(); toggleComments()"
+          >View</a
+        >
+        <input
+          type="text"
+          class="input"
+          name="commentInput"
+          id="commentInput"
+          class="form-control"
+          [formControl]="comment"
+          placeholder="Comments here"
+        />
+        <a
+          href="#"
+          class="btn btn-secondary btn-lg"
+          (click)="
+            $event.preventDefault();
+            postComment({ jobId: job._id ?? '', comment: comment.value })
+          "
+          >Post</a
+        >
+      </div>
+      <div *ngIf="showAddress" class="p-1">{{ job.address }}</div>
+      <ng-container *ngIf="showTipInput">
+        <div class="input-group">
+          <input
+            type="number"
+            name="tip"
+            id="tip"
+            class="form-control"
+            [formControl]="tip"
+            placeholder="Enter amount to be tipped"
+          />
+          <a
+            href="#"
+            class="btn btn-secondary mx-1 btn-lg"
+            (click)="$event.preventDefault(); sendTip()"
+            >Tip</a
+          >
+        </div>
+      </ng-container>
+      <ng-container *ngIf="showComments">
+        <ul
+          id="commentsShow"
+          name="commentsShow"
+          class="list-group w-100"
+          *ngFor="let cmt of job.comments; let ci = index"
+        >
+          <li class="list-group-item">
+            <span style="font-size: 12px">
+              <small>{{ cmt.createdAt }}</small>
+              <em style="position: absolute; right: 5px">{{
+                cmt.createdBy
+              }}</em></span
+            >
+            <p>{{ cmt.comment }}</p>
+          </li>
+        </ul>
+      </ng-container>
+    </div>
+  </div>
+</ng-container> -->
+
+<!-- <p>
+  <span class="input">
+    <input type="text" placeholder="Gradient border focus fun" />
+    <span></span>
+  </span>
+</p> -->

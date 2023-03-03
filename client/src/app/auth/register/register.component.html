@@ -1,0 +1,77 @@
+<div
+  class="container"
+  style="
+    max-width: 450px;
+    position: fixed;
+    top: 150px;
+    left: 450px;
+    border: gray solid 0.15rem;
+    padding: 2rem;
+  "
+>
+  <form action="" [formGroup]="user">
+    <h1 class="text-center">Register</h1>
+    <mat-form-field class="w-100">
+      <mat-label for="email">
+        Sign up with an email or crypto address (BEP-20)
+      </mat-label>
+      <input
+        matInput
+        type="text"
+        id="email"
+        name="email"
+        formControlName="email"
+      />
+      <mat-error *ngIf="user.controls.email.errors?.email">Invalid</mat-error>
+      <mat-error *ngIf="user.controls.email.errors?.required"
+        >Required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-100 my-1">
+      <mat-label for="password"> Your password </mat-label>
+      <input
+        matInput
+        type="password"
+        id="password"
+        name="password"
+        formControlName="password"
+      />
+      <mat-error *ngIf="user.controls.password.errors?.required"
+        >Required</mat-error
+      >
+      <mat-error *ngIf="user.controls.password.errors?.minlength"
+        >Minimum 4 digits</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-100 my-1">
+      <mat-label for="password"> Your password </mat-label>
+      <input
+        matInput
+        type="password"
+        id="password"
+        name="password"
+        formControlName="cnfPassword"
+      />
+      <mat-error *ngIf="user.controls.cnfPassword.errors?.required"
+        >Required</mat-error
+      >
+      <mat-error *ngIf="user.controls.cnfPassword.errors?.minlength"
+        >Minimum 4 digits</mat-error
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      class="my-1"
+      id="register"
+      name="register"
+      value="Register"
+      (click)="submitForm()"
+    >
+      Register
+    </button>
+    <a href="#" color="primary" mat-button routerLink="/main/auth/login">
+      Already have an Account?</a
+    >
+  </form>
+</div>

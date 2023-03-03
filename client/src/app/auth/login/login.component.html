@@ -1,0 +1,60 @@
+<div
+  class="container"
+  style="
+    width: min(450px, 100vw);
+    position: fixed;
+    top: 150px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: hsl(0, 0%, 96%);
+    padding: 2rem;
+  "
+>
+  <form action="" method="POST" [formGroup]="user">
+    <h1 class="text-center">Login</h1>
+    <mat-form-field class="w-100">
+      <mat-label for="email"> Enter email or crypto address </mat-label>
+      <input
+        matInput
+        type="text"
+        id="email"
+        name="email"
+        formControlName="email"
+      />
+      <mat-error *ngIf="user.controls.email.errors?.email">Invalid</mat-error>
+      <mat-error *ngIf="user.controls.email.errors?.required"
+        >Required</mat-error
+      >
+    </mat-form-field>
+    <mat-form-field class="w-100 my-1">
+      <mat-label for="password"> Enter your password </mat-label>
+      <input
+        matInput
+        type="password"
+        id="password"
+        name="password"
+        formControlName="password"
+      />
+      <mat-error *ngIf="user.controls.password.errors?.required"
+        >Required</mat-error
+      >
+      <mat-error *ngIf="user.controls.password.errors?.minlength"
+        >Minimum 4 digits</mat-error
+      >
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      class="my-1"
+      id="login"
+      name="login"
+      value="Login"
+      (click)="submitForm()"
+    >
+      Login
+    </button>
+    <a href="#" color="primary" mat-button routerLink="/main/auth/register">
+      Don't have an Account?</a
+    >
+  </form>
+</div>

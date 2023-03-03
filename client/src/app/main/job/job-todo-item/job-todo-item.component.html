@@ -1,0 +1,143 @@
+<ng-container>
+    <div id="proof_work" style="max-width: 100vw;">
+        <div class="card card-header mt-1">
+            <span class="d-block"><em>Posted </em>
+                <span *ngIf="jobTodo.cryptoAddress" id="email"><em>by </em> <b>{{jobTodo.cryptoAddress}}</b></span>
+                <span *ngIf="!jobTodo.cryptoAddress"><em>anonymously</em></span>
+            </span>
+            <span id="createAt" class="d-block" style="font-size: 12px;"><small>{{jobTodo.createdAt}}</small></span>
+            <!-- <span style="position:absolute; right: 10px;"> <em>Poll Ends In </em> <b> {{ pollEndsIn > 0 ? pollEndsIn :
+                    '--'}} </b></span> -->
+            <span style="position:absolute; right: 10px;"> {{jobTodo._id}}</span>
+        </div>
+        <div class="card card.body">
+            <div id="proof_work_carousel{{ind}}" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    <button type="button" [attr.data-bs-target]="'#proof_work_carousel'+ind" data-bs-slide-to="0"
+                        class="active" aria-current="true" aria-label="before"></button>
+                    <button type="button" [attr.data-bs-target]="'#proof_work_carousel'+ind" data-bs-slide-to="1"
+                        aria-label="location"></button>
+                </div>
+                <div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="1500">
+                        <img #bRef class="d-block" [src]="currentSafeUrl" alt="current image" width="450" height="260">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1>Current</h1>
+                        </div>
+                    </div>
+                    <div class="carousel-item" data-bs-interval="1500">
+                        <img #lRef class="d-block" [src]="locationUrl" alt="location map" width="450" height="260">
+                        <div class="carousel-caption d-none d-md-block">
+                            <h1>{{jobTodo.address}}</h1>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#proof_work_carousel'+ind"
+                    data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#proof_work_carousel'+ind"
+                    data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+            <div class="px-1">
+                {{jobTodo.address}}
+            </div>
+        </div>
+        <div class="card card-footer">
+            {{ jobTodo.description}}
+        </div>
+        <div class="my-1 py-1 mx-0 ">
+            <div class="d-flex w-100 ps-2">
+                <button *ngIf="!jobTodo.cryptoAddress && currentUserCryptoAddr()" class="btn-secondary btn-lg m-0 p-0"
+                    (click)="markAsTaken()">Take</button>
+                <button
+                    *ngIf="jobTodo.cryptoAddress && !jobTodo.jobId && currentUserCryptoAddr() && currentUserCryptoAddr() === jobTodo.cryptoAddress"
+                    class="btn-secondary btn-lg m-0 p-0 ms-1" data-bs-toggle="modal"
+                    data-bs-target="#workDoneModel">Done</button>
+                <a *ngIf="jobTodo.jobId && currentUserCryptoAddr()" class="m-0 p-0 ms-1" style="cursor:pointer;"
+                    (click)="showJob(jobTodo.jobId)" data-bs-toggle="modal" data-bs-target="#jobModel">
+                    goto job</a>
+                <!-- <a href="#" class="me-1" (click)="$event.preventDefault(); pollEndsIn > 0 ?  upvote(jobTodo._id): null">
+                    <i class="bi-arrow-up"> <span class="badge bg-primary"
+                            style="font-size:.5rem">{{jobTodo?.votes?.up}}</span></i>
+                </a>
+                <a href="#" class="me-1" (click)="$event.preventDefault(); pollEndsIn > 0 ? downvote(jobTodo._id) : null">
+                    <i class="bi-arrow-down"> <span class="badge bg-primary"
+                            style="font-size:.5rem">{{jobTodo?.votes?.down}}</span></i>
+                </a>
+                <a href="#" class="me-1 ms-1" (click)="$event.preventDefault(); toggleComments()">
+                    <i class="bi-chat-dots-fill" style="line-height: 1.8rem;"></i>
+                </a>
+                <span style="position: absolute; right:3rem;"><i class="bi-hourglass-split"></i>{{jobTodo?.hours}}</span>
+                <a href="#" style="position: absolute; right:1rem;" (click)="$event.preventDefault(); toggleTipInput()">
+                    <i class="bi-piggy-bank"> <span *ngIf="tipItem.status" class="badge bg-primary"
+                            style="font-size:.5rem">{{tipItem?.amount}}</span></i>
+                </a> -->
+            </div>
+            <!-- <div class="input-group w-100">
+                <input type="text" name="commentInput" id="commentInput" class="form-control" [formControl]="comment" placeholder="Comment here">
+                <a href="#" class="btn btn-secondary btn-lg" (click)=" $event.preventDefault(); postComment({jobId:jobTodo._id, comment: comment.value}); comment.setValue('')">Send</a>
+            </div>
+            <ng-container *ngIf="showTipInput">
+                <div class="input-group">
+                    <input type="number" name="tip" id="tip" class="form-control" [formControl]="tip" placeholder="Enter amount to be tipped">
+                    <a href="#" class="btn btn-secondary mx-1 btn-lg" (click)=" $event.preventDefault(); sendTip()">Tip</a>
+                </div>
+            </ng-container>
+            <div *ngIf="showCommets">
+                <ul id="commentsShow" name="commentsShow" class="list-group w-100" *ngFor="let cmt of jobTodo.comments; let ci = index;">
+                    <li class="list-group-item">
+                        <span style="font-size: 12px;"> <small>{{cmt.createdAt}}</small> <em style="position: absolute; right: 5px;">{{cmt.createdBy}}</em></span>
+                        <p>{{cmt.comment}}</p>
+                    </li>
+                </ul>
+            </div> -->
+        </div>
+    </div>
+
+    <!--WorkDone Modal -->
+    <div class="modal" id="workDoneModel" tabindex="-1" aria-labelledby="workDoneModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workDoneModalLabel">Completed the job? </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="file" name="proofImage" id="proofImage" class="form-control d-inline"
+                        (change)="collectProofImage($event)">
+                    <input type="number" name="timeTaken" id="timeTaken" class="form-control d-inline mt-1"
+                        [formControl]="timeTaken">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="markAsWorkDone()"
+                        [attr.disabled]="timeTaken.value && proofImage ? null : true">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Job Modal -->
+    <div class="modal" id="jobModel" tabindex="-1" aria-labelledby="jobModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="jobModalLabel">Mode view </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <app-job-item *ngIf="job?._id" [job]="job"></app-job-item>
+                    <div *ngIf="!job?._id"> job not found</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>

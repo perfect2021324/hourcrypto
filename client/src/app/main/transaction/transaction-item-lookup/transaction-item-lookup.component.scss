@@ -1,0 +1,15 @@
+article{
+    display: flex;
+    flex-direction: column;
+    padding: .5em;
+    background-color: #dfdfdf;
+    border: black;
+    div{
+        p{
+            padding: .5rem;
+            background-color: #fff;
+            border-radius: .5rem;
+            border: hsl(0, 0%, 37%);
+        }
+    }
+}

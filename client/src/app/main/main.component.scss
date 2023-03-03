@@ -1,0 +1,236 @@
+@use '/node_modules/bootstrap/scss/bootstrap-grid.scss'as bp;
+
+
+@include bp.media-breakpoint-down(md) {}
+
+
+
+.app-main {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: max-content 1fr;
+}
+
+.app-main .navbar {
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    background-color: rgb(98, 147, 243);
+    padding: 1vh;
+    // height: 10vh;
+}
+
+.logo img {
+    width: auto;
+    height: 9vh;
+    // --aspect-ratio: 4/1;
+
+}
+
+.btn {
+    padding: 0%;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    font-size: 4vh;
+    background-color: rgb(127, 193, 255);
+    color: rgb(255, 255, 255);
+    margin-left: 1vw;
+    margin-right: 1vw;
+    text-shadow: 3px;
+
+}
+
+html,
+body {
+    height: 100%;
+    background-color: aqua;
+}
+
+a {
+    font-size: 3vmin;
+    line-height: 3vh;
+}
+
+.bg-secondary{
+  background: url(../../app/img/bg1.jpg) no-repeat;
+  background-position: 0 0;
+  background-size: 100% 100%;
+  opacity: 0.7;
+}
+.nav-item:hover .dropdown-container{
+  display: block;
+}
+.dropdown-container{
+  margin-left:10px;
+  display: none;
+}
+.dropdown-container a{
+  color:white;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  text-decoration: none;
+}
+.sidebar-menu ul{
+  padding-inline-start:0 !important;
+}
+.sidebar-submenu{
+  display:none;
+}
+li.active .sidebar-submenu{
+  display: block !important;
+}
+.sidebar-menu li{
+  list-style: none;
+}
+.sidebar-menu li a{
+  text-decoration:none;
+}
+.sidebar-menu li a span{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size:20px;
+  color:white;
+}
+.sidebar-menu li ul{
+  padding-left:20px !important;
+}
+.sidebar-submenu li a{
+  color:rgb(236, 231, 231);
+}
+.sidebar-menu li i{
+  color:white;
+  font-size:17px;
+}
+.sidebar-menu li a{
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.menu-bar{
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+.menu-bar i{
+  margin-right:10px;
+}
+.sidebar-menu ul li:not(:last-child){
+  margin-bottom:5px;
+}
+.sidebar-submenu{
+  margin-top:5px;
+}
+.sidebar-menu .sidebar-submenu ul li:hover > a{
+  background-color:rgb(182, 174, 174);
+}
+.sidebar-menu .sidebar-submenu ul li a{
+  line-height: 25px;
+  padding-left:5px;
+}
+.subitem-submenu{
+  margin-left:10px;
+}
+.searchBar{
+  padding:10px 5px;
+  border-top:1px solid #ddd;
+  border-bottom:1px solid #ddd;
+  margin:20px 0;
+  display:flex;
+  flex-direction: row;
+  align-items: center;
+}
+.searchBar input{
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+  font-size:15px;
+  outline:none;
+  padding-left:10px;
+  line-height: 35px;
+  width:75%;
+  background-color: rgba(255,255,255,.1);
+  border:none;
+  color:white;
+}
+.search-part{
+  height:37px;
+  width:25%;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(255,255,255,.1);
+  color:white;
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+.search-part i{
+  opacity:0.3;
+  font-size:16px;
+  color:white;
+}
+.subitem-bar{
+  padding-left:10px;
+}
+.subitem-nav{
+  display: flex;
+  justify-content:space-between;
+  align-items: center;
+  padding-right:5px;
+}
+a.text-light, a.sidebar-url, .sidebar-menu ul li a{
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  font-size:20px;
+  color:white;
+}
+a.sidebar-url, .sidebar-menu ul li a{
+  line-height: 35px;
+  padding:0 5px;
+}
+a.sidebar-url:hover, .sidebar-menu ul li a:hover, .subitem-nav:hover{
+  background-color:rgb(77, 6, 243);
+}
+a.text-light:hover{
+  font-weight: 1000;
+}
+.logout-part{
+  margin-top:10px;
+}
+.logout-part li{
+  list-style: none;
+}
+.logout-part li a{
+  font-size:20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color:white;
+}
+
+.account-part li{
+  list-style: none;
+}
+.account-part li a{
+  font-size:20px;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+  color:white;
+  text-decoration: none;
+}
+li.email-address{
+  height:50px;
+  background-color: rgba(255,255,255,.1);
+  border-radius: 5px;
+  margin:10px 0;
+}
+li.email-address a{
+  line-height: 30px;
+  font-weight: 800;
+  text-align: center;
+}
+.nav-item a span.text-light{
+  font-family: Arial, Helvetica, sans-serif;
+}
+.nav-item a.account-href{
+  width:100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding:0 20px;
+}
+

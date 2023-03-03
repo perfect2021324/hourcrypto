@@ -1,0 +1,29 @@
+article {
+  width: 20rem;
+  height: 4rem;
+  position: relative;
+  border: 0.125rem solid blue;
+  border-radius: 1rem;
+  margin: 0.4rem;
+  cursor: pointer;
+}
+
+.made-with {
+  position: absolute;
+  top: 40%;
+  left: 1rem;
+  transform: translateY(-50%);
+  font-weight: 700;
+}
+.amount {
+  position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+}
+.made-at {
+  position: absolute;
+  bottom: 10%;
+  left: 1rem;
+  font-size: 0.7rem;
+}

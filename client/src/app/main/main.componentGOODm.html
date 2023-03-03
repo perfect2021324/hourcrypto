@@ -1,0 +1,236 @@
+<div class="app-main">
+  <div
+    class="position-sticky top-0 bottom-0 container-fluid m-0 p-0"
+    style="z-index: 8000"
+  >
+    <nav class="navbar">
+      <button class="btn" style="font-size: 4vh" (click)="sidenav.toggle()">
+        <span class="bi-list"></span>
+      </button>
+
+      <a class="logo">
+        <img src="./../../assets/images/logo.png" alt="hourTrade" />
+      </a>
+
+      <button
+        class="btn"
+        style="position: absolute; right: 0"
+        style="font-size: 4vh"
+        (click)="right.toggle()"
+      >
+        <span class="bi-list"></span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ---------left right side end -->
+
+  <mat-progress-bar
+    *ngIf="store.getLoading()"
+    mode="indeterminate"
+    style="height: 1vh"
+  ></mat-progress-bar>
+
+  <!-- app body -->
+  <mat-sidenav-container
+    style="position: relative; display: block; width: 100vw"
+  >
+    <mat-sidenav
+      #sidenav
+      position="start"
+      mode="side"
+      style="min-width: 20vw; max-width: 45vw"
+      class="bg-secondary ps-4 pt-3 pe-3 pb-2"
+    >
+      <!-- LEFT NAV BAR -->
+
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light" routerLink="job/create">
+            Upload New Job -</a
+          >
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link text-light" routerLink="job/u/view">
+            View Jobs -^</a
+          >
+          <div class="dropdown-container" *ngIf="isLoggedIn">
+            <a href="#">New Jobs</a><br />
+            <a href="#">Flagged Jobs</a><br />
+            <a href="#" class="dropdown-btn">My Jobs ^^</a>
+            <div class="dropdown-container">
+              <a href="#">All My Jobs</a><br />
+              <a href="#">Completed Jobs</a><br />
+              <a href="#">Pending Jobs</a><br />
+              <a href="#">Approved Jobs</a><br />
+              <a href="#">Denied Jobs</a>
+            </div>
+            <li class="nav-item" *ngIf="isLoggedIn">
+              <a
+                href="#"
+                class="nav-link text-light"
+                routerLink="transaction/view"
+              >
+                View Transactions -^</a>
+
+              <div class="dropdown-container">
+                <a href="#" class="dropdown-btn">My Transactions ^^</a>
+                <div class="dropdown-container">
+                  <a href="#">All</a><br />
+                  <a href="#">Hours Sent</a><br />
+                  <a href="#">Hours Received</a>
+                </div>
+                <a href="#" class="nav-link dropdown-btn"
+                  >World Transactions ^^</a
+                >
+                <div class="dropdown-container">
+                  <a href="#">All</a><br />
+                  <a href="#">Hours Sent</a><br />
+                  <a href="#">Hours Received</a><br />
+                  <a href="#">Hours Redeemed</a><br />
+                  <a href="#">Hours Converted</a>
+                </div>
+              </div>
+            </li>
+          </div>
+        </li>
+      </ul>
+      <a href="#" class="nav-link text-light"> Support -</a>
+
+      <a href="#" class="nav-link text-light" routerLink="donate"> Donate -</a>
+    </mat-sidenav>
+
+    <!-- RIGHT SIDENAV down -->
+
+    <mat-sidenav
+      #right
+      position="end"
+      mode="side"
+      style="min-width: 20vw; max-width: 45vw"
+      class="bg-secondary ps-4 pt-3 pe-3 pb-2"
+    >
+      <ul class="navbar-nav">
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a>
+            MY HOURS:
+            <span
+              href="#"
+              id="wallet"
+              name="wallet"
+              class="text-light"
+              style="line-height: 3vh"
+              ><i class="bi-hourglass-split text-light"></i>
+              {{ currentUser.getWallet() | number }}</span
+            ></a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a
+            href="#"
+            id="profileName"
+            class="nav-link text-light"
+            aria-expanded="false"
+          >
+            {{ currentUser.getCryptoAddress() }}</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light" routerLink="job/u/view">
+            My Account -</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light">Use Your Hours -^</a>
+          <div class="dropdown-container">
+            <a href="#" routerLink="transaction/create">Send to User</a><br />
+            <a href="#" routerLink="payment/wallet">Redeem to Cash</a><br />
+            <a href="#">Convert to Crypto</a>
+          </div>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light" routerLink="transaction/view">
+            Buy Hours -</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light" routerLink="job/create"
+            >Earn Hours -</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a href="#" class="nav-link text-light" routerLink="">
+            Change Password -</a
+          >
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn">
+          <a
+            href="#"
+            routerLink="/main/auth/login"
+            class="nav-link text-light"
+            (click)="logout()"
+          >
+            Logout -</a
+          >
+        </li>
+      </ul>
+      <ng-container *ngIf="!isLoggedIn">
+        <a href="#" class="nav-link text-light" routerLink="/main/auth/login">
+          Login</a
+        >
+
+        <span href="#" class="text-light" style="line-height: 3vh"></span>
+
+        <a href="#" class="nav-link text-light" routerLink="/main/auth/register"
+          >Register</a
+        >
+      </ng-container>
+    </mat-sidenav>
+
+    <!-- router outlet -->
+    <mat-sidenav-content
+      style="
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        display: grid;
+        grid-template-rows: 1fr auto;
+      "
+    >
+      <section style="overflow-y: scroll; background: radial-gradient(circle, rgba(85,98,207,1) 0%, rgba(0,44,255,1) 43%, rgba(255,255,255,1) 100%);">
+        <router-outlet></router-outlet>
+      </section>
+      <!-- pagination -->
+      <section class="position-relative container-fluidp-0 m-0">
+        <div class="d-flex justify-content-center pe-3 m-0">
+          <mat-paginator
+            *ngIf="store.getPaginator().display"
+            style="
+              width: 100%;
+              max-width: 100vw;
+              z-index: 10000;
+              border: .3vh solid #b8b8b8;
+            "
+            [length]="store.getPaginator().length"
+            [pageSize]="store.getPaginator().pageSize"
+            [pageSizeOptions]="store.getPaginator().pageSizeOptions"
+            (page)="controlPage($event)"
+          >
+          </mat-paginator>
+        </div>
+      </section>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>
+
+<!-- removed services may be used in future version  -->
+
+<!--
+        <li class="nav-item">
+          <a href="#" class="nav-link text-light" routerLink="job/needVoluteer">
+            Post Job</a
+          >
+        </li>
+        <li class="nav-item">
+          <a href="#" class="nav-link text-light" routerLink="job/new">
+            Find Job</a
+          > -->

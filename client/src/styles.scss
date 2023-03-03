@@ -1,0 +1,33 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+
+.clipboard {
+    &::after {
+        content: 'click';
+        cursor: pointer;
+    }
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.modal-backdrop {
+    display: none !important;
+}
+
+// input:not([type=button]):not([type=reset]):not([type=submit]):not([type=image]),
+// textarea {
+//     &:focus {
+//         outline: none;
+//         box-shadow: none;
+//         border-bottom: purple solid .2rem;
+//     }
+// }

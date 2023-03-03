@@ -1,0 +1,22 @@
+<div class="container" style="max-width: 450px; position:fixed; top:150px;left:450px;">
+    <form [formGroup]="transfer" action="" method="POST" (ngSubmit)="submitForm()">
+        <h1 class="text-center">
+            Hours transfer
+        </h1>
+
+        <mat-form-field class="mt-1 w-100">
+            <mat-label for="hours">Hours</mat-label>
+            <input matInput type="number" name="hours" id="hours" class="p-1" formControlName="hours" />
+            <mat-error *ngIf="transfer.controls.hours.errors?.required">Required</mat-error>
+            <mat-error *ngIf="transfer.controls.hours.errors?.min">At least an hour</mat-error>
+        </mat-form-field>
+        <mat-form-field class="mt-1 w-100">
+            <mat-label for="cryptoAddress">Crypto Address</mat-label>
+            <input matInput type="email" name="cryptoAddress" id="cryptoAddress" class="p-1"
+                formControlName="cryptoAddress" />
+            <mat-error *ngIf="transfer.controls.cryptoAddress.errors?.required">Required</mat-error>
+            <mat-error *ngIf="transfer.controls.cryptoAddress.errors?.email">Invalid</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="accent" class="my-1" type="submit">Send</button>
+    </form>
+</div>

@@ -1,0 +1,13 @@
+
+
+
+main{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+.lookup{
+    position: fixed;
+    top: 4rem;
+    right: .2rem;
+    height: calc(100vh - 4rem);
+}

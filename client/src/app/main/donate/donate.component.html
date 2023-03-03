@@ -1,0 +1,31 @@
+
+<div class="container" style="width: 98vw ;max-width: 600px; height: 400px; position: relative; top: 10vh; ">
+    <ng-container *ngIf="show.form">
+        <div class="tab tab-header">
+            <h2 class="text-center">
+                Donate us
+            </h2>
+        </div>
+        <div class="tab tab-body">
+            <form action="" [formGroup]="form">
+                <div class="form-floating">
+                    <input type="number" name="amount" id="amount" class="form-control" placeholder="$0.00" formControlName="amount">
+                    <label for="amount">$0.00</label>
+                </div>
+                <input type="button" value="Donate" class="btn btn-secondary mt-1" (click)= "submitForm()">
+            </form>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="show.progress">
+        <div >
+            <span class="spinner-border">Process...</span>
+            <h2> Please do not refesh or close the window</h2>
+            <h5> Page will be automatically reloaded once transaction complete</h5>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="show.response">
+        <div>
+            <h2>{{response.message}}</h2>
+        </div>
+    </ng-container>
+</div>

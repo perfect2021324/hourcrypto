@@ -1,0 +1,126 @@
+const paypal = require('paypal-rest-sdk')
+const util = require('util')
+
+const configure = () => {
+    let clientId = "AbLKtsxgNnNUEexH7UgZMB60F1VbMkvJyX5anLprG0HUURXqO1sRFTgYI-CAUtwjVX4hlA4Sy-L0rIfC"
+    let clientSecret = "EAShzgXNkRdUIEGVCF9Su4rqc8G3SZkHjQTcDW-w2VKT2rqggHL-eDPCwU9SWrg3jjnjXB29dxKE8hZ9"
+    // Live Account details
+    //env = new paypal.core.LiveEnvironment(clientId, clientSecret)
+    env = new paypal.core.SandboxEnvironment(clientId, clientSecret)
+    let client = new paypal.core.PayPalHttpClient(env)
+    return client
+}
+
+const payment = async (amount, item, sku, description) => {
+    let approvalUrl = ""
+    let client = configure()
+    const create_payment_json = {
+        "intent": "sale",
+        "payer": {
+            "payment_method": "paypal"
+        },
+        "redirect_urls": {
+            "return_url": "http://localhost:3000/payment/approved",
+            "cancel_url": "http://localhost:3000/payment/canceled"
+        },
+        "transactions": [{
+            "item_list": {
+                "items": [{
+                    "name": item,
+                    "sku": sku,
+                    "price": amount,
+                    "currency": "USD",
+                    "quantity": 1
+                }]
+            },
+            "amount": {
+                "currency": "USD",
+                "total": amount
+            },
+            "description": description
+        }]
+    };
+    try {
+        let request = new paypal.v1.payments.PaymentCreateRequest();
+        request.requestBody(create_payment_json);
+
+        let response = await client.execute(request)
+        console.log(response.statusCode)
+        console.log(response.result)
+        for (let link of response.result.links) {
+            if (link.rel === "approval_url") {
+                approvalUrl = link.href
+            }
+        }
+    }
+    catch (err) {
+        console.error(err)
+    }
+    return approvalUrl
+}
+
+const paymentExecute = async (payerId, paymentId) => {
+    let client = configure()
+    const execute_payment_json = {
+        "payer_id": payerId,
+        // "transactions": [{
+        //     "amount": {
+        //         "currency": "USD",
+        //         "total": total
+        //     }
+        // }]
+    }
+
+    let request = new paypal.v1.payments.PaymentExecuteRequest(paymentId)
+    request.requestBody(execute_payment_json)
+    try{
+        let response = await client.execute(request)
+        // console.log(response.statusCode)
+        // console.log(response.result)
+        console.log(response)
+        return response
+    }
+    catch(err){
+        console.error(err)
+        return {status: "failed"}
+    }
+}
+
+
+const payout = (amount, payTo, subject, note) => {
+    configure()
+    const sender_batch_id = Math.random().toString(36).substring(9)
+    const create_payout_json = {
+        "sender_batch_header": {
+            "sender_batch_id": sender_batch_id,
+            "email_subject": subject
+        },
+        "items": [
+            {
+                "recipient_type": "EMAIL",
+                "amount": {
+                    "value": amount,
+                    "currency": "USD"
+                },
+                "receiver": payTo,
+                "note": note,
+                "sender_item_id": "cryptofirst1"
+            }
+        ]
+    }
+    const sync_mode = true
+    paypal.payout.create(create_payout_json, sync_mode, function (error, response) {
+        if (error) {
+            console.log(error.response)
+            throw error
+        } else {
+            console.log("Create Single Payout Response")
+            console.log(response)
+            return response
+        }
+    })
+}
+
+exports.payment = payment
+exports.paymentExecute = paymentExecute
+exports.payout = payout

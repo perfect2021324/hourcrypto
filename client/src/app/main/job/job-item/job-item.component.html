@@ -1,0 +1,218 @@
+<ng-container>
+  <div id="proof_work" style="width: 99vw; height: auto">
+    <div class="card card-header mt-2">
+
+      <span style="font-size: 2.5vh; font: sans-serif; line-height: 3vh;">{{ job?.hours }} hour work : Earn time by
+        Voting Below :
+        <em>Voting time </em>{{ pollEndsIn > 0 ? pollEndsIn : "--" }}
+        {{ job.status }}</span>
+
+    </div>
+    <div class="card card.body"
+      style="background: radial-gradient(circle, rgba(85,98,207,1) 0%, rgba(0,44,255,1) 43%, rgba(255,255,255,1) 100%);">
+      <div id="proof_work_carousel{{ ind }}" class="carousel slide" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          <button type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind" data-bs-slide-to="0" class="active"
+            aria-current="true" aria-label="before"></button>
+          <button type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind" data-bs-slide-to="1"
+            aria-label="after"></button>
+          <button type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind" data-bs-slide-to="2"
+            aria-label="location"></button>
+          <button type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind" data-bs-slide-to="3"
+            aria-label="description"></button>
+        </div>
+        <div class="carousel-inner">
+          <div class="carousel-item active" data-bs-interval="1500">
+            <img #bRef class="d-block" [src]="beforeSafeUrl" alt="before.jpeg" />
+            <div class="carousel-caption d-none d-md-block">
+              <h1>Before</h1>
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="1500">
+            <img #aRef class="d-block" [src]="afterSafeUrl" alt="after.jpeg" />
+            <div class="carousel-caption d-none d-md-block">
+              <h1>After</h1>
+            </div>
+          </div>
+          <div class="carousel-item" data-bs-interval="1500">
+            <div class="p-1">{{ job.address }}</div>
+            <img #lRef class="d-block" [src]="locationUrl" alt="go online to see the location" role="button"
+              data-bs-toggle="modal" [attr.data-bs-target]="'#mapbox-readonly-modal-'+ this.job._id" />
+
+          </div>
+          <div class="carousel-item carousel-item-four description" data-bs-interval="1500">
+            <!-- <img
+              #bRef
+              class="d-block"
+              [src]="beforeSafeUrl"
+              alt="before.jpeg"
+            /> -->
+            <a href="#" id="email" target="_blank" class="d-block user-name" title="click to view user details"
+              [routerLink]="'/main/job/' + this.job._account._id+'/view'">
+              <em> Posted by </em>
+              <b>{{ job._account.cryptoAddress }}</b>
+            </a>
+            <span id="createAt" style="font-size: 3vh" class="mg-top d-block"><small>{{ job.createdAt }}</small></span>
+
+            <span style="font-size: 3vh" class="mg-top d-block">
+              {{ pollEndsIn > 0 ? pollEndsIn : "" }} <b>{{ job.status==='done'?'Job Status Done': job.status}}</b>
+            </span>
+
+            <div class="carousel-caption d-none d-md-block mg-top">
+              <h1>{{job.address}}</h1>
+            </div>
+
+            <div class="p-2" style="text-transform: capitalize; text-align: center">
+              {{ job.description }}
+            </div>
+
+            <div class="p-1">{{ job.address }}</div>
+            <ng-container *ngIf="showTipInput">
+              <div class="input-group tip-container">
+                <input type="number" name="tip" id="tip" class="form-control" [formControl]="tip"
+                  placeholder="Enter amount to be tipped" />
+                <a href="#" class="btn btn-secondary mx-1 btn-lg" (click)="$event.preventDefault(); sendTip()">Tip</a>
+              </div>
+            </ng-container>
+
+            <a href="#" class="toggleInputBtn" (click)="$event.preventDefault(); toggleTipInput()">
+              <i class="bi-piggy-bank">
+                <span *ngIf="tipItem.status" class="badge bg-primary" style="font-size: 0.5rem">{{ tipItem?.amount
+                  }}</span></i>
+            </a>
+
+          </div>
+        </div>
+        <button class="carousel-control-prev" type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind"
+          data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" [attr.data-bs-target]="'#proof_work_carousel' + ind"
+          data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+
+    </div>
+
+    <div class="card card-footer mx-0 px-0 text-center">
+      <a href="#" class="me-1" (click)="
+          $event.preventDefault(); pollEndsIn > 0 && this.currentUserCryptoAddress!==this.job._account.cryptoAddress ? upvote(job._id ?? '') : null
+        ">
+        <i [class]="'bi bi-hand-thumbs-up' + (isUserVotedUp() ? '-fill' : '')"
+          title="vote up if u believe user is being honest and did a good job">
+          <span *ngIf="pollEndsIn <= 0" class="badge bg-primary" style="font-size: 2vh">{{ job?.votes?.up?.length ?? 0
+            }}</span></i>
+      </a>
+
+      <a href="#" class="me-1" (click)="
+          $event.preventDefault(); pollEndsIn > 0 && this.currentUserCryptoAddress!==this.job._account.cryptoAddress ? flagvote(job._id ?? '') : null
+        ">
+        <i [class]="'bi bi-flag' + (isUserVotedFlag() ? '-fill' : '')"
+          title="FLAG if post is inappropriate and/or offensive">
+          <span *ngIf="pollEndsIn <= 0" class="badge bg-primary" style="font-size: 2vh">{{ job?.votes?.flag?.length ?? 0
+            }}</span></i>
+      </a>
+
+      <a href="#" class="me-1" (click)="
+          $event.preventDefault();
+          pollEndsIn > 0 && this.currentUserCryptoAddress!==this.job._account.cryptoAddress ? downvote(job._id ?? '') : null
+        ">
+        <i [class]="
+            'bi bi-hand-thumbs-down' + (isUserVotedDown() ? '-fill' : '')
+          " title="Vote down if you believe user is being dishonest with the time and/or authenticity of this post">
+          <span *ngIf="pollEndsIn <= 0" class="badge bg-primary" style="font-size: 2vh">{{ job?.votes?.down?.length ?? 0
+            }}</span></i>
+      </a>
+    </div>
+
+    <app-map *ngIf="job.coords && job.address" [modalId]="'mapbox-readonly-modal-' + this.job._id" [readOnly]="true"
+      [latitude]="this.job.coords.latitude" [longitude]="this.job.coords.longitude" [location]="job.address.toString()"
+      [mapId]="this.job._id"></app-map>
+  </div>
+</ng-container>
+<div class="input-group comment-contianer">
+  <a href="#" class="btn btn-secondary btn-sm" (click)="$event.preventDefault(); toggleComments()">View</a>
+  <input type="text" class="input" name="commentInput" id="commentInput" class="form-control" [formControl]="comment"
+    placeholder="Comments here" />
+  <a href="#" class="btn btn-secondary btn-sm" (click)="
+      $event.preventDefault();
+      postComment({ jobId: job._id ?? '', comment: comment.value })
+    ">Post</a>
+</div>
+
+<ng-container *ngIf="showComments">
+  <ul id="commentsShow" name="commentsShow" class="list-group" *ngFor="let cmt of job.comments; let ci = index">
+    <li class="list-group-item">
+      <span style="font-size: 1.5vh">
+        <small>{{ cmt.createdAt }} {{ cmt.createdBy }}</small>
+        <em style="position: absolute; right: 2vh">reply</em></span>
+      <p style="font-size: 2vh">{{ cmt.comment }}</p>
+    </li>
+  </ul>
+</ng-container>
+
+<!-- extra code for forth slide------------- -->
+
+<!-- <a href="" id="email" class="d-block" title="click to view user details"
+        ><<em> Posted by </em><b>{{ job._account.cryptoAddress }}</b></a
+      >
+      <span id="createAt" style="font-size: 3vh"
+        ><small>{{ job.createdAt }}</small></span
+      > -->
+<!-- <span style="position: absolute; right: 1vw; font-size: 3vh">
+        {{ pollEndsIn > 0 ? pollEndsIn : "00:00" }} <b>{{ job.status }}</b>
+      </span> -->
+
+<!-- <div class="carousel-caption d-none d-md-block">
+                            <h1>{{job.address}}</h1>
+                          </div> -->
+
+<!-- <div class="p-2" style="text-transform: capitalize; text-align: center"> -->
+<!-- {{ job.description }} -->
+<!-- </div> -->
+
+<!-- <div *ngIf="showAddress" class="p-1">{{ job.address }}</div>
+<ng-container *ngIf="showTipInput">
+  <div class="input-group">
+    <input
+      type="number"
+      name="tip"
+      id="tip"
+      class="form-control"
+      [formControl]="tip"
+      placeholder="Enter amount to be tipped"
+    />
+    <a
+      href="#"
+      class="btn btn-secondary mx-1 btn-lg"
+      (click)="$event.preventDefault(); sendTip()"
+      >Tip</a
+    >
+  </div>
+</ng-container> 
+
+ <a
+          href="#"
+          style="position: absolute; right: 5rem"
+          (click)="$event.preventDefault(); toggleAddress()"
+          ><i class="bi-geo"></i
+        ></a>
+
+        <a
+          href="#"
+          style="position: absolute; right: 1rem"
+          (click)="$event.preventDefault(); toggleTipInput()"
+        >
+          <i class="bi-piggy-bank">
+            <span
+              *ngIf="tipItem.status"
+              class="badge bg-primary"
+              style="font-size: 0.5rem"
+              >{{ tipItem?.amount }}</span
+            ></i
+          >
+        </a>
+ </div> -->

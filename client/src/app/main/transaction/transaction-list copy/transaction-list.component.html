@@ -1,0 +1,43 @@
+<table class="table table-stripped">
+    <thead>
+        <tr>
+            <th>
+                
+            </th>
+            <th>
+                TransactionDate
+            </th>
+            <th>
+                Amount
+            </th>
+            <th>
+                Indicator
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let transaction of transactions; let ind = index">
+            <td>
+                <button data-bs-toggle="modal" data-bs-target="#transLookupModal" (click)="showLookup(transaction, ind)">Details</button>
+            </td>
+            <td>
+                {{transaction.createdAt}}
+            </td>
+            <td *ngIf="transaction.indicator =='dr'">
+                {{transaction.debitAmount}}
+            </td>
+            <td *ngIf="transaction.indicator =='cr'">
+                {{transaction.creditAmount}}
+            </td>
+            <td>
+                {{transaction.indicator}}
+            </td>
+        </tr>
+    </tbody>
+
+</table>
+<ng-container *ngIf="transaction">
+    <app-transaction-item-lookup [transaction]="transaction">
+
+    </app-transaction-item-lookup>
+</ng-container>

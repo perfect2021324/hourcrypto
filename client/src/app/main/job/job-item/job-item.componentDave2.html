@@ -1,0 +1,111 @@
+<ng-container>
+  <div id="proof_work">
+    <div class="card card-header mt-1">
+      <span id="email" class="d-block"
+        ><em> Posted by </em> <b>{{job.cryptoAddress}}</b></span
+      >
+      <span id="createAt" style="font-size: 12px"
+        ><small>{{job.createdAt}}</small></span
+      >
+      <span style="position: absolute; right: 10px">
+        <em>Poll Ends In </em>
+        <b> {{ pollEndsIn > 0 ? pollEndsIn : '--'}} </b></span
+      >
+    </div>
+    <div class="card card.body">
+      <ul
+        class="d-flex w-100 p-2"
+        style="list-style: none; justify-content: space-between"
+      >
+        <li class="mt-2">
+          <figure class="figure">
+            <img
+              #bRef
+              class="figure-img img-thubnail"
+              [src]="beforeSafeUrl"
+              alt="before.jpeg"
+              width="400x"
+              height="250px"
+            />
+            <figcaption class="figure-caption">before</figcaption>
+          </figure>
+        </li>
+        <li class="mt-2">
+          <figure class="figure">
+            <img
+              #aRef
+              class="figure-img img-thubnail"
+              [src]="afterSafeUrl"
+              alt="after.jpeg"
+              width="400px"
+              height="250px"
+            />
+            <figcaption class="figure-caption">after</figcaption>
+          </figure>
+        </li>
+      </ul>
+    </div>
+    <div class="card card-footer">
+      <div class="d-flex w-100 p-2">
+        <a
+          class="mr-2"
+          href="#"
+          (click)="$event.preventDefault(); pollEndsIn > 0 ?  upvote(job._id): null"
+        >
+          <i class="bi-arrow-up">
+            <span class="badge bg-primary" style="font-size: 0.5rem"
+              >{{job?.votes?.up}}</span
+            ></i
+          >
+        </a>
+        <a
+          href="#"
+          (click)="$event.preventDefault(); pollEndsIn > 0 ? downvote(job._id) : null"
+        >
+          <i class="bi-arrow-down">
+            <span class="badge bg-primary" style="font-size: 0.5rem"
+              >{{job?.votes?.down}}</span
+            ></i
+          >
+        </a>
+        <span style="position: absolute; right: 3rem"
+          ><i class="bi-hourglass"></i>{{job?.hours}}</span
+        >
+        <a
+          href="#"
+          style="position: absolute; right: 1rem"
+          (click)="$event.preventDefault(); toggleTipInput()"
+        >
+          <i class="bi-piggy-bank">
+            <span
+              *ngIf="tipItem.status"
+              class="badge bg-primary"
+              style="font-size: 0.5rem"
+              >{{tipItem?.amount}}</span
+            ></i
+          >
+        </a>
+      </div>
+      <ng-container *ngIf="showTipInput">
+        <div class="input-group">
+          <div class="form-floating">
+            <input
+              type="number"
+              name="tip"
+              id="tip"
+              class="form-control"
+              [formControl]="tip"
+            />
+            <label for="tip">Tip amount</label>
+          </div>
+          <a
+            href="#"
+            class="btn btn-secondary mx-1"
+            (click)=" $event.preventDefault(); sendTip()"
+            >Tip</a
+          >
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-container>

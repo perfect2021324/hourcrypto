@@ -1,0 +1,29 @@
+
+
+<article>
+    <button (click)="_hide()">close</button>
+    <div>
+        <label for="id">Transaction ID</label>
+        <p id="id" clipboard>{{trans.transId}} </p>
+    </div>
+    <div>
+        <label for="id">Amount</label>
+        <p id="id"> $ {{trans.indicator==="dr" ? trans.debitAmount : trans.creditAmount}} </p>
+    </div>
+    <div>
+        <label for="id">Date</label>
+        <p id="id">{{trans.createdAt | date}} </p>
+    </div>
+    <div>
+        <label for="id">Time</label>
+        <p id="id">{{trans.createdAt | date:'hh:mm:ss'}} </p>
+    </div>
+    <div>
+        <label for="id">Debit Account</label>
+        <p id="id">{{trans._debitAccount.cryptoAddress}} </p>
+    </div>
+    <div>
+        <label for="id">Credit Account</label>
+        <p id="id">{{trans._creditAccount.cryptoAddress}} </p>
+    </div>
+</article>

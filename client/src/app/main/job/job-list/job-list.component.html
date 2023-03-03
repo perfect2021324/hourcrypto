@@ -1,0 +1,20 @@
+<!-- <div class="position-relative w-100 h-100 p-0 m-0">
+    <div *ngFor="let job of [jobs[0], jobs[1], jobs[2]]; let i = index;"
+        class="d-flex" style="justify-content: center;">
+        <app-job-item [job]="job" [ind]="i"></app-job-item>
+    </div>
+    <app-no-records-found *ngIf="jobs.length === 0"></app-no-records-found>
+</div> -->
+<div class="user-posts-header" *ngIf="userId && jobs.length && userId!='u' ">
+    {{'Jobs posted by '+jobs[0]._account.email + ':'}}
+<button class="close-window-button" (click)="closeWindow()">Close Window</button>
+</div>
+
+<div class="position-relative w-100 h-100 p-0 m-0">
+    <div *ngFor="let job of jobs.slice(store.getPaginator().pageIndex * store.getPaginator().pageSize , store.getPaginator().pageIndex * store.getPaginator().pageSize + store.getPaginator().pageSize); let i = index;"
+        class="d-flex" style="justify-content: center;">
+        <!-- <app-job-item [job]="job" [ind]="i" [upvote]="upvote" [downvote]="downvote"[flagvote]="flagvote" [validateAndSendCredits]="validateAndSendCredits" [updateTip]="updateTip" [postComment]="postComment"></app-job-item> -->
+        <app-job-item [job]="job" [ind]="i" ></app-job-item>
+    </div>
+    <app-no-records-found *ngIf="jobs.length === 0"></app-no-records-found>
+</div>
